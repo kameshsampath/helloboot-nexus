@@ -66,11 +66,11 @@
           <profile>jenkins-springboot-app</profile>
           <enricher>
             <config>
-            <fmp-openshift-bc-enricher>
+            <fmp-openshift-bc-jenkins-enricher>
               <genericSecret>abcde</genericSecret>
               <githubWebHookSecret>wxyz</githubWebHookSecret>
               <mavenMirrorUrl>http://nexus</mavenMirrorUrl>
-            </fmp-openshift-bc-enricher>
+            </fmp-openshift-bc-jenkins-enricher>
             </config>
           </enricher>
         </configuration>
