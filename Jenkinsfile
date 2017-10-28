@@ -4,6 +4,6 @@ node("maven") {
     sh "mvn test"
   }
   stage("Deploy") {
-    sh "mvn  -popenshift -DskipTests clean fabric8:deploy"
+    sh "mvn  -Popenshift -DskipTests clean fabric8:deploy"
   }
 }
