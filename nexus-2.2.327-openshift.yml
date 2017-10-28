@@ -1,0 +1,106 @@
+---
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations: {}
+    labels:
+      app: nexus
+    name: nexus
+  spec:
+    ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8081
+    selector:
+      app: nexus
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations: {}
+    labels:
+      app: nexus
+      version: 2.2.327
+    name: nexus-storage
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations: {}
+    labels:
+      app: nexus
+    name: nexus
+  spec:
+    replicas: 1
+    selector:
+      app: nexus
+    template:
+      metadata:
+        annotations: {}
+        labels:
+          app: nexus
+      spec:
+        containers:
+        - env:
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          image: fabric8/nexus:2.2.327
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /content/repositories/
+              port: 8081
+            initialDelaySeconds: 180
+            timeoutSeconds: 10
+          name: nexus
+          ports:
+          - containerPort: 8081
+            name: http
+          readinessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /content/repositories/
+              port: 8081
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+          resources:
+            limits:
+              cpu: "0"
+              memory: "0"
+            requests:
+              cpu: "0"
+              memory: "0"
+          volumeMounts:
+          - mountPath: /sonatype-work/storage
+            name: nexus-storage
+            readOnly: false
+        volumes:
+        - name: nexus-storage
+          persistentVolumeClaim:
+            claimName: nexus-storage
+    triggers:
+    - type: ConfigChange
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations: {}
+    labels:
+      app: nexus
+      expose: "true"
+    name: nexus
+  spec:
+    port:
+      targetPort: 8081
+    to:
+      kind: Service
+      name: nexus
