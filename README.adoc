@@ -1,18 +1,13 @@
-= Examples
+= Overview
 
-All examples are maintained seperate github repos, each example below shows the repo from where they can be
-cloned.
+This is a very simple Spring Boot project that says hello world, with Jenkins spice added to it.  It uses
+the default OpenShift Jenkins `maven` slave node for running Jenkins jobs.
+The Jenkins slaves will use Nexus as a Maven Mirror configured via env variable `MAVEN_MIRROR_URL`
 
 [NOTE]
 ===
 * First builds will usually take time as jenkins image needs to pulled
 ===
-
-== Overview
-
-This is a very simple Spring Boot project that says hello world, with Jenkins spice added to it.  It uses
-the default OpenShift Jenkins `maven` slave node for running Jenkins jobs.
-The Jenkins slaves will use Nexus as a Maven Mirror configured via env variable `MAVEN_MIRROR_URL`
 
 == Build and Deploy 
 
