@@ -1,4 +1,4 @@
-podTemplate(name: 'maven33', label: 'maven33', cloud: 'openshift', containers: [
+podTemplate(name: 'maven33', label: 'maven33', cloud: 'openshift',serviceAccount: 'helloboot-nexus', containers: [
     containerTemplate(name: 'jnlp',
                 image: 'openshift/jenkins-slave-maven-centos7',
                 workingDir: '/tmp',
@@ -6,8 +6,7 @@ podTemplate(name: 'maven33', label: 'maven33', cloud: 'openshift', containers: [
                     envVar(key: 'MAVEN_MIRROR_URL',value: 'http://nexus/nexus/content/groups/public/')
                 ],
                 cmd: '',
-                args: '${computer.jnlpmac} ${computer.name}'),
-                serviceAccount: "helloboot-nexus"
+                args: '${computer.jnlpmac} ${computer.name}')
 ]){
   node("maven33") {
     checkout scm
