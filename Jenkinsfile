@@ -6,7 +6,8 @@ podTemplate(name: 'maven33', label: 'maven33', cloud: 'openshift', containers: [
                     envVar(key: 'MAVEN_MIRROR_URL',value: 'http://nexus/nexus/content/groups/public/')
                 ],
                 cmd: '',
-                args: '${computer.jnlpmac} ${computer.name}')
+                args: '${computer.jnlpmac} ${computer.name}'),
+                serviceAccount: "helloboot-nexus"
 ]){
   node("maven33") {
     checkout scm
