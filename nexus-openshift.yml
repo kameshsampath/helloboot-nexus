@@ -22,8 +22,7 @@ items:
     annotations: {}
     labels:
       app: nexus
-      version: 2.2.327
-    name: nexus-storage
+    name: nexus-pvc
   spec:
     accessModes:
     - ReadWriteOnce
@@ -53,12 +52,12 @@ items:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
-          image: fabric8/nexus:2.2.327
+          image: sonatype/nexus
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              path: /content/repositories/
+              path: /nexus/content/groups/public
               port: 8081
             initialDelaySeconds: 180
             timeoutSeconds: 10
@@ -69,7 +68,7 @@ items:
           readinessProbe:
             failureThreshold: 10
             httpGet:
-              path: /content/repositories/
+              path: /nexus/content/groups/public
               port: 8081
             initialDelaySeconds: 60
             timeoutSeconds: 10
@@ -81,13 +80,13 @@ items:
               cpu: "0"
               memory: "0"
           volumeMounts:
-          - mountPath: /sonatype-work/storage
-            name: nexus-storage
+          - mountPath: /sonatype-work
+            name: nexus-pvc
             readOnly: false
         volumes:
-        - name: nexus-storage
+        - name: nexus-pvc
           persistentVolumeClaim:
-            claimName: nexus-storage
+            claimName: nexus-pvc
     triggers:
     - type: ConfigChange
 - apiVersion: v1
